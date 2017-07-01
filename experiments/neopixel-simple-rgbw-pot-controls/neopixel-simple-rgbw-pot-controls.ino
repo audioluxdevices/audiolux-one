@@ -1,5 +1,15 @@
-// NeoPixel Ring simple sketch (c) 2013 Shae Erisson
-// released under the GPLv3 license to match the rest of the AdaFruit NeoPixel library
+/*  
+  Control SK6812RGBW LEDs with Hue, Saturation and Brightness (HSB / HSV ) plus separate "whiteness" dimmer.
+ 
+  Hue is change by right potentiometer  
+  Brightness stays constant at 255.
+  Saturation stays constant at 255
+  White diode controlled by left potentiometer.
+ 
+  getRGB() function based on <http://www.codeproject.com/miscctrl/CPicker.asp>  
+  dim_curve idea by Jims
+  based on code by kasperkamperman.com
+*/
 
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
@@ -10,7 +20,15 @@
 #define PIN            6
 
 // How many LEDs are attached to the Audiolux?
-#define NUMPIXELS      33
+#define NUMPIXELS      300
+
+// Code for Smoothing Pot Analog Input
+const int numReadings = 10;
+
+int readings[numReadings];      // the readings from the analog input
+int readIndex = 0;              // the index of the current reading
+int total = 0;                  // the running total
+int potControlWhitenessAverage = 0;   // the average
 
 // When we setup the NeoPixel library, we tell it how many pixels, and which pin to use to send signals.
 // Note that for older NeoPixel strips you might need to change the third parameter--see the strandtest
@@ -50,6 +68,7 @@ int brightness;
 int white;
 
 void setup() {
+  Serial.begin(9600);      // open the serial port at 9600 bps:
   pixels.begin(); // This initializes the NeoPixel library.
 }
 
@@ -58,21 +77,44 @@ void loop() {
   int potControlWhiteness = analogRead(2); // assign analog reading of left potentiometer knob to control Whiteness
   int potControlHue = analogRead(3);  // assign analog reading of right potentiometer knob to control hue
 
+  // Code for Analog Pot smoothing
+  // subtract the last reading:
+  total = total - readings[readIndex];
+  // read from the pot:
+  readings[readIndex] = potControlWhiteness;
+  // add the reading to the total:
+  total = total + readings[readIndex];
+  // advance to the next position in the array:
+  readIndex = readIndex + 1;
+
+  // if we're at the end of the array...
+  if (readIndex >= numReadings) {
+  // ...wrap around to the beginning:
+  readIndex = 0;
+  }
+
+  // calculate the average:
+  potControlWhitenessAverage = total / numReadings;
+  // send it to the computer as ASCII digits
+  //Serial.println(potControlWhitenessAverage);
+  delay(1);        // delay in between reads for stability
+        
   // set HSB & White values
   int hue = map(potControlHue, 0, 1023, 0, 255); // map right pot knob to 0-255 values of hue
   int saturation = 255;                               // saturation is a number between 0 - 255
-  int brightness = 255;
-  int whiteness = map(potControlWhiteness, 1023, 0, 0, 255); // map left pot knob to 0-255 values of Whiteness
-
+  int brightness = 128;
+  int whiteness = map(potControlWhitenessAverage, 1024, 0, 0, 255); // map left pot knob to 0-255 values of Whiteness
+  Serial.println(whiteness);
+  
   getRGB(hue,saturation,brightness,rgb_colors);   // converts HSB to RGB
  
   // For a set of NeoPixels the first NeoPixel is 0, second is 1, all the way up to the count of pixels minus one.
   for(int i=0;i<NUMPIXELS;i++){
     // pixels.Color takes RWGB values, from 0,0,0,0 up to 255,255,255,255
     pixels.setPixelColor(i, pixels.Color(rgb_colors[0],whiteness,rgb_colors[1],rgb_colors[2])); // Color order: R,W,G,B.
+  }
     pixels.show(); // This sends the updated pixel color to the hardware.
 
-  }
 }
 
 void getRGB(int hue, int sat, int val, int colors[3]) { 

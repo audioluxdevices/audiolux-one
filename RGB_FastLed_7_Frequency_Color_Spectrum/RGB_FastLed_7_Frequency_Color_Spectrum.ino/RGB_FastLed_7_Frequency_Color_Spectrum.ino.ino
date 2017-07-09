@@ -37,13 +37,13 @@ CRGB leds[NUM_LEDS];
 #define MSGEQ7_INTERVAL ReadsPerSecond(60)
 #define MSGEQ7_SMOOTH true
 #define FLOOR 65 // increase this if you have noise when no signal input
-#define MAX_IN 255 // change this depending on the signal level input.
+#define MAX_IN 255 // change this depending on the signal level input (also affects height of LED columns)
 
 // LED MAPPING
 #define COLUMN_SIZE 15 // numLEDs per column.
 
 // LED COLORS
-
+// To Add: More sophisicated color mapping here.
 
 CMSGEQ7<MSGEQ7_SMOOTH, pinReset, pinStrobe, pinAnalogLeft, pinAnalogRight> MSGEQ7;
 

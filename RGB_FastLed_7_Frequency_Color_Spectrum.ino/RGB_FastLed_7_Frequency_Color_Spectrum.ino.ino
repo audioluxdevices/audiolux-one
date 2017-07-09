@@ -23,7 +23,7 @@
  */
  
 #include<FastLED.h>
-#define NUM_LEDS 112
+#define NUM_LEDS 113
 
 // The leds
 CRGB leds[NUM_LEDS];
@@ -65,32 +65,36 @@ void loop() {
   // Led strip output
   if (newReading) {
     int led6 = map(MSGEQ7.get(MSGEQ7_6), FLOOR, MAX_IN, 1, COLUMN_SIZE);
-    leds[led6] = CRGB::Fuchsia;
-    for (int i = 0; i < led6; i++) {leds[i] = CRGB::Purple;}
+    leds[1+led6] = CRGB::Fuchsia;
+    for (int i = 0; i < led6; i++) {leds[1+i] = CRGB::Purple;}
     
     int led5 = map(MSGEQ7.get(MSGEQ7_5), FLOOR, MAX_IN, 1, COLUMN_SIZE);
-    leds[31-led5] = CRGB::DarkBlue;
-    for (int i = 0; i < led5; i++) {leds[32-i] = CRGB::Blue;}
+    leds[32-led5] = CRGB::DarkBlue;
+    for (int i = 0; i < led5; i++) {leds[33-i] = CRGB::Blue;}
     
     int led4 = map(MSGEQ7.get(MSGEQ7_4), FLOOR, MAX_IN, 1, COLUMN_SIZE);
-    leds[32+led4] = CRGB::PowderBlue;
-    for (int i = 0; i < led4; i++) { leds[32+i] = CRGB::Turquoise;}
+    leds[33+led4] = CRGB::PowderBlue;
+    for (int i = 0; i < led4; i++) { leds[33+i] = CRGB::Turquoise;}
         
     int led3 = map(MSGEQ7.get(MSGEQ7_3), FLOOR, MAX_IN, 1, COLUMN_SIZE);
-    leds[63-led3] = CRGB::ForestGreen;
-    for (int i = 0; i < led3; i++) {leds[63-i] = CRGB::Green;}
+    leds[64-led3] = CRGB::ForestGreen;
+    for (int i = 0; i < led3; i++) {leds[64-i] = CRGB::Green;}
     
     int led2 = map(MSGEQ7.get(MSGEQ7_2), FLOOR, MAX_IN, 1, COLUMN_SIZE);
-    leds[64+led2] = CRGB::Yellow;
-    for (int i = 0; i < led2; i++) {leds[64+i] = CRGB::Gold;}
+    leds[65+led2] = CRGB::Yellow;
+    for (int i = 0; i < led2; i++) {leds[65+i] = CRGB::Gold;}
 
     int led1 = map(MSGEQ7.get(MSGEQ7_1), FLOOR, MAX_IN, 1, COLUMN_SIZE);
-    leds[95-led1] = CRGB::DarkOrange;
-    for (int i = 0; i < led1; i++) {leds[95-i] = CRGB::OrangeRed;}
+    leds[96-led1] = CRGB::DarkOrange;
+    for (int i = 0; i < led1; i++) {leds[96-i] = CRGB::OrangeRed;}
     
     int led0 = map(MSGEQ7.get(MSGEQ7_0), FLOOR, MAX_IN, 1, COLUMN_SIZE);
-    leds[96+led0] = CRGB::Red;
-    for (int i = 0; i < led0; i++) {leds[96+i] = CRGB::Red; }
+    leds[97+led0] = CRGB::Red;
+    for (int i = 0; i < led0; i++) {leds[97+i] = CRGB::Red; }
+
+    int led7 = map(MSGEQ7.get(MSGEQ7_0), FLOOR, MAX_IN, 1, COLUMN_SIZE);
+    leds[0] = CRGB::White;
+    //for (int i = 0; i < led7; i++) {leds[i] = CRGB::White; }
     
   LEDS.show();
   BlackOut();     

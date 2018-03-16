@@ -2,7 +2,7 @@
 #include <Adafruit_NeoPixel.h>
 #include "EEPROM.h"
 #define PIN 6
-#define CNT_LIGHTS 180 // Max LEDs is ~183 with RGBW array.
+#define CNT_LIGHTS 121 // Max LEDs is ~170 with RGBW array (more is unstable).
 
 // Adafruit_NeoPixel strip = Adafruit_NeoPixel(CNT_LIGHTS, PIN, NEO_RWGB + NEO_KHZ800);
  Adafruit_NeoPixel pixels = Adafruit_NeoPixel(CNT_LIGHTS, PIN, NEO_RWGB + NEO_KHZ800);
@@ -114,7 +114,7 @@ int rgb_colors[3];
  
 int hue = 115; 
 int saturation;
- int brightness = 128; //starting value
+int brightness = 128; //starting value
 int white;
 int whiteness;
 

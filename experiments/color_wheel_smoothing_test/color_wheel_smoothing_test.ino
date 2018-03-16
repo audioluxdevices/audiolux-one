@@ -1,5 +1,5 @@
 #include <FastLED.h>
-#define NUM_LEDS 111
+#define NUM_LEDS 301
 #define DATA_PIN 6
 #define LEFT_POT_PIN 2 // Left pot controls brightness
 #define RIGHT_POT_PIN 3 // Right pot controls color

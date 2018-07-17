@@ -11,7 +11,7 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(CNT_LIGHTS, PINforControl, NEO_GRB +
 
 unsigned long patternInterval = 50 ; // time between steps in the pattern
 unsigned long lastUpdate = 0 ; // for millis() when last update occoured
-unsigned long intervals [] = { 10, 150, 150, 25 } ; // speed for each pattern
+unsigned long intervals [] = { 10, 150, 0, 25 } ; // speed for each pattern
 const byte button = 5; // pin to connect button switch to between pin and ground
 
 // Hardware Variables
@@ -37,10 +37,35 @@ int right_end_point = (CNT_LIGHTS-1);
 // Variable to test whether monomode is active
 boolean monomode = 0;
 
+
 void setup() {
   strip.begin(); // This initializes the NeoPixel library.
   wipe(); // wipes the LED buffers
   pinMode(button, INPUT_PULLUP); // change pattern button
+
+  // Set pin modes
+  pinMode(analog_pin_L, INPUT);
+  pinMode(analog_pin_R, INPUT);  
+  //pinMode(button, INPUT);  
+  pinMode(analog_pin_R, INPUT);
+  pinMode(strobe_pin, OUTPUT);
+  pinMode(reset_pin, OUTPUT);
+
+  digitalWrite(reset_pin, LOW);
+  digitalWrite(strobe_pin, HIGH); 
+/*
+  // If stomp is being pressed during setup, set monomode to True
+  if (digitalRead(button) == HIGH){
+    if (EEPROM.read(1) == 0){
+      EEPROM.write(1,1);
+    }else if (EEPROM.read(1) == 1) {
+      EEPROM.write(1,0);
+    }  
+  }
+
+  // Set monomode based on the EEPROM state
+  monomode = EEPROM.read(1);
+*/
 }
 
 void loop() {
@@ -163,7 +188,8 @@ void internalLEDOnly(){ // clear all LEDs
 }
 
 void soundReactive_A3() { // Sound Reactive Visualization based on A3 code.
-
+  digitalWrite(reset_pin, HIGH);
+  digitalWrite(reset_pin, LOW);
   int cur_sum_L = 0;  
   int cur_sum_R = 0;
 
